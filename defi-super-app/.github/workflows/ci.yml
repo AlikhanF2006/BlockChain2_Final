@@ -1,0 +1,130 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache Foundry
+        uses: actions/cache@v4
+        with:
+          path: ~/.foundry
+          key: foundry-${{ runner.os }}-${{ hashFiles('foundry.toml') }}
+          restore-keys: |
+            foundry-${{ runner.os }}-
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+
+      - name: Install dependencies
+        run: |
+          forge install OpenZeppelin/openzeppelin-contracts --no-commit
+          forge install smartcontractkit/chainlink-brownie-contracts@1.3.0 --no-commit
+          forge install foundry-rs/forge-std --no-commit
+
+      - name: Build
+        run: forge build
+
+      - name: Test
+        run: forge test --gas-report
+
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache Foundry
+        uses: actions/cache@v4
+        with:
+          path: ~/.foundry
+          key: foundry-${{ runner.os }}-${{ hashFiles('foundry.toml') }}
+          restore-keys: |
+            foundry-${{ runner.os }}-
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+
+      - name: Install dependencies
+        run: |
+          forge install OpenZeppelin/openzeppelin-contracts --no-commit
+          forge install smartcontractkit/chainlink-brownie-contracts@1.3.0 --no-commit
+          forge install foundry-rs/forge-std --no-commit
+
+      - name: Generate LCOV
+        run: forge coverage --report lcov
+
+      - name: Enforce 90 percent coverage
+        run: |
+          node -e "const fs=require('fs'); const text=fs.readFileSync('lcov.info','utf8'); let lh=0, lf=0; for (const line of text.split(/\r?\n/)) { if (line.startsWith('LH:')) lh += Number(line.slice(3)); if (line.startsWith('LF:')) lf += Number(line.slice(3)); } const pct = lf === 0 ? 100 : (lh / lf) * 100; console.log('line coverage=' + pct.toFixed(2) + '%'); if (pct < 90) process.exit(1);"
+
+  slither:
+    name: Slither
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache Foundry
+        uses: actions/cache@v4
+        with:
+          path: ~/.foundry
+          key: foundry-${{ runner.os }}-${{ hashFiles('foundry.toml') }}
+          restore-keys: |
+            foundry-${{ runner.os }}-
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+
+      - name: Install dependencies
+        run: |
+          forge install OpenZeppelin/openzeppelin-contracts --no-commit
+          forge install smartcontractkit/chainlink-brownie-contracts@1.3.0 --no-commit
+          forge install foundry-rs/forge-std --no-commit
+
+      - name: Install Slither
+        run: pip install slither-analyzer
+
+      - name: Run Slither
+        run: slither src/ --fail-high --fail-medium
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache Foundry
+        uses: actions/cache@v4
+        with:
+          path: ~/.foundry
+          key: foundry-${{ runner.os }}-${{ hashFiles('foundry.toml') }}
+          restore-keys: |
+            foundry-${{ runner.os }}-
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+
+      - name: Lint Solidity
+        run: forge fmt --check
