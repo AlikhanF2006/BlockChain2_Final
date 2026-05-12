@@ -1,0 +1,45 @@
+{
+  "network": "arbitrum-sepolia",
+  "chainId": 421614,
+  "deployedAt": "<block number>",
+  "contracts": {
+    "GovToken": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "blockExplorer": "https://sepolia.arbiscan.io/address/0x0000000000000000000000000000000000000000"
+    },
+    "InterestRateModel": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "blockExplorer": "https://sepolia.arbiscan.io/address/0x0000000000000000000000000000000000000000"
+    },
+    "AMMFactory": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "blockExplorer": "https://sepolia.arbiscan.io/address/0x0000000000000000000000000000000000000000"
+    },
+    "AMMPool": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "blockExplorer": "https://sepolia.arbiscan.io/address/0x0000000000000000000000000000000000000000"
+    },
+    "LendingPool": {
+      "proxy": "0x0000000000000000000000000000000000000000",
+      "implementation": "0x0000000000000000000000000000000000000000",
+      "blockExplorer": "https://sepolia.arbiscan.io/address/0x0000000000000000000000000000000000000000"
+    },
+    "YieldVault": {
+      "proxy": "0x0000000000000000000000000000000000000000",
+      "implementation": "0x0000000000000000000000000000000000000000",
+      "blockExplorer": "https://sepolia.arbiscan.io/address/0x0000000000000000000000000000000000000000"
+    },
+    "DeFiTimelock": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "blockExplorer": "https://sepolia.arbiscan.io/address/0x0000000000000000000000000000000000000000"
+    },
+    "DeFiGovernor": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "blockExplorer": "https://sepolia.arbiscan.io/address/0x0000000000000000000000000000000000000000"
+    },
+    "ChainlinkAdapter": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "blockExplorer": "https://sepolia.arbiscan.io/address/0x0000000000000000000000000000000000000000"
+    }
+  }
+}

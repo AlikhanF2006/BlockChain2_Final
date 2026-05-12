@@ -1,0 +1,70 @@
+[
+  {
+    "type": "event",
+    "name": "LiquidityAdded",
+    "inputs": [
+      { "name": "provider", "type": "address", "indexed": true },
+      { "name": "amountA", "type": "uint256", "indexed": false },
+      { "name": "amountB", "type": "uint256", "indexed": false },
+      { "name": "liquidity", "type": "uint256", "indexed": false }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "LiquidityRemoved",
+    "inputs": [
+      { "name": "provider", "type": "address", "indexed": true },
+      { "name": "amountA", "type": "uint256", "indexed": false },
+      { "name": "amountB", "type": "uint256", "indexed": false },
+      { "name": "liquidity", "type": "uint256", "indexed": false }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "Swap",
+    "inputs": [
+      { "name": "sender", "type": "address", "indexed": true },
+      { "name": "tokenIn", "type": "address", "indexed": true },
+      { "name": "amountIn", "type": "uint256", "indexed": false },
+      { "name": "amountOut", "type": "uint256", "indexed": false },
+      { "name": "to", "type": "address", "indexed": true }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "Sync",
+    "inputs": [
+      { "name": "reserveA", "type": "uint112", "indexed": false },
+      { "name": "reserveB", "type": "uint112", "indexed": false }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "function",
+    "name": "tokenA",
+    "stateMutability": "view",
+    "inputs": [],
+    "outputs": [{ "type": "address" }]
+  },
+  {
+    "type": "function",
+    "name": "tokenB",
+    "stateMutability": "view",
+    "inputs": [],
+    "outputs": [{ "type": "address" }]
+  },
+  {
+    "type": "function",
+    "name": "getReserves",
+    "stateMutability": "view",
+    "inputs": [],
+    "outputs": [
+      { "type": "uint112" },
+      { "type": "uint112" },
+      { "type": "uint32" }
+    ]
+  }
+]

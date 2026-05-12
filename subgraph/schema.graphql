@@ -1,0 +1,65 @@
+type Pool @entity {
+  id: ID!
+  tokenA: Bytes!
+  tokenB: Bytes!
+  reserveA: BigInt!
+  reserveB: BigInt!
+  totalVolumeUSD: BigDecimal!
+  totalLiquidityUSD: BigDecimal!
+  txCount: BigInt!
+  createdAtTimestamp: BigInt!
+  swaps: [Swap!]! @derivedFrom(field: "pool")
+}
+
+type Swap @entity {
+  id: ID!
+  pool: Pool!
+  sender: Bytes!
+  tokenIn: Bytes!
+  amountIn: BigInt!
+  amountOut: BigInt!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+}
+
+type LoanPosition @entity {
+  id: ID!
+  borrower: Bytes!
+  collateralAmount: BigInt!
+  debtAmount: BigInt!
+  healthFactor: BigDecimal!
+  lastUpdatedTimestamp: BigInt!
+  borrows: [BorrowEvent!]! @derivedFrom(field: "position")
+}
+
+type BorrowEvent @entity {
+  id: ID!
+  position: LoanPosition!
+  amount: BigInt!
+  timestamp: BigInt!
+}
+
+type Proposal @entity {
+  id: ID!
+  proposer: Bytes!
+  targets: [Bytes!]!
+  description: String!
+  state: String!
+  forVotes: BigInt!
+  againstVotes: BigInt!
+  abstainVotes: BigInt!
+  startBlock: BigInt!
+  endBlock: BigInt!
+  createdAtTimestamp: BigInt!
+  votes: [Vote!]! @derivedFrom(field: "proposal")
+}
+
+type Vote @entity {
+  id: ID!
+  proposal: Proposal!
+  voter: Bytes!
+  support: Int!
+  weight: BigInt!
+  reason: String
+  timestamp: BigInt!
+}

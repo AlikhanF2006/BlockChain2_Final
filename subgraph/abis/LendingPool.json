@@ -1,0 +1,67 @@
+[
+  {
+    "type": "event",
+    "name": "Deposit",
+    "inputs": [
+      { "name": "user", "type": "address", "indexed": true },
+      { "name": "amount", "type": "uint256", "indexed": false }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "Withdraw",
+    "inputs": [
+      { "name": "user", "type": "address", "indexed": true },
+      { "name": "amount", "type": "uint256", "indexed": false }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "CollateralDeposited",
+    "inputs": [
+      { "name": "user", "type": "address", "indexed": true },
+      { "name": "amount", "type": "uint256", "indexed": false }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "CollateralWithdrawn",
+    "inputs": [
+      { "name": "user", "type": "address", "indexed": true },
+      { "name": "amount", "type": "uint256", "indexed": false }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "Borrow",
+    "inputs": [
+      { "name": "user", "type": "address", "indexed": true },
+      { "name": "amount", "type": "uint256", "indexed": false }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "Repay",
+    "inputs": [
+      { "name": "user", "type": "address", "indexed": true },
+      { "name": "amount", "type": "uint256", "indexed": false }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "Liquidation",
+    "inputs": [
+      { "name": "borrower", "type": "address", "indexed": true },
+      { "name": "liquidator", "type": "address", "indexed": true },
+      { "name": "repaid", "type": "uint256", "indexed": false },
+      { "name": "seized", "type": "uint256", "indexed": false }
+    ],
+    "anonymous": false
+  }
+]

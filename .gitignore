@@ -1,4 +1,4 @@
-# Environment / secrets
+# Secrets
 .env
 .env.*
 !.env.example
@@ -7,11 +7,11 @@
 out/
 cache/
 broadcast/
-coverage/
 lcov.info
 *.lcov
+coverage/
 
-# Dependencies
+# Node / frontend / subgraph
 node_modules/
 frontend/node_modules/
 subgraph/node_modules/
@@ -26,7 +26,6 @@ frontend/build/
 *.log
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
 pnpm-debug.log*
 
 # OS / editor
@@ -35,13 +34,13 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Temporary backups / archives
+# Archives / backups
 *.zip
 *.rar
 *.7z
 *.tar
 *.tar.gz
 
-# Temporary folders
+# Temp
 tmp/
 temp/
