@@ -22,7 +22,7 @@ export function VoteModal({ proposal, onClose }: { proposal: Proposal; onClose: 
           <button onClick={onClose}>Close</button>
         </div>
         <p>{proposal.description}</p>
-        <p className="muted">Voting power {votingPower.data ? formatEther(votingPower.data) : "0"}</p>
+        <p className="muted">Voting power {(votingPower as any).data ? formatEther((votingPower as any).data as bigint) : "0"}</p>
         <div className="segmented">
           <button className={support === 1 ? "selected" : ""} onClick={() => setSupport(1)}>For</button>
           <button className={support === 0 ? "selected" : ""} onClick={() => setSupport(0)}>Against</button>

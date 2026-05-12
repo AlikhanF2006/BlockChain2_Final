@@ -20,5 +20,8 @@
     "vite": "^7.0.0",
     "wagmi": "^2.14.11"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3"
+  }
 }
