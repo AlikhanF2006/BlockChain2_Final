@@ -44,3 +44,4 @@ Thumbs.db
 # Temp
 tmp/
 temp/
+frontend/tsconfig.tsbuildinfo

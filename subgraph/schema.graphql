@@ -1,4 +1,4 @@
-type Pool @entity {
+type Pool @entity(immutable: false) {
   id: ID!
   tokenA: Bytes!
   tokenB: Bytes!
@@ -11,7 +11,7 @@ type Pool @entity {
   swaps: [Swap!]! @derivedFrom(field: "pool")
 }
 
-type Swap @entity {
+type Swap @entity(immutable: true) {
   id: ID!
   pool: Pool!
   sender: Bytes!
@@ -22,7 +22,7 @@ type Swap @entity {
   blockNumber: BigInt!
 }
 
-type LoanPosition @entity {
+type LoanPosition @entity(immutable: false) {
   id: ID!
   borrower: Bytes!
   collateralAmount: BigInt!
@@ -32,14 +32,14 @@ type LoanPosition @entity {
   borrows: [BorrowEvent!]! @derivedFrom(field: "position")
 }
 
-type BorrowEvent @entity {
+type BorrowEvent @entity(immutable: true) {
   id: ID!
   position: LoanPosition!
   amount: BigInt!
   timestamp: BigInt!
 }
 
-type Proposal @entity {
+type Proposal @entity(immutable: false) {
   id: ID!
   proposer: Bytes!
   targets: [Bytes!]!
@@ -54,7 +54,7 @@ type Proposal @entity {
   votes: [Vote!]! @derivedFrom(field: "proposal")
 }
 
-type Vote @entity {
+type Vote @entity(immutable: true) {
   id: ID!
   proposal: Proposal!
   voter: Bytes!
