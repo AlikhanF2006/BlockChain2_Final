@@ -12,114 +12,102 @@ jobs:
   build:
     name: Build and Test
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Cache Foundry
-        uses: actions/cache@v4
-        with:
-          path: ~/.foundry
-          key: foundry-${{ runner.os }}-${{ hashFiles('foundry.toml') }}
-          restore-keys: |
-            foundry-${{ runner.os }}-
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: stable
-
-      - name: Install dependencies
-        run: |
-          forge install OpenZeppelin/openzeppelin-contracts
-          forge install smartcontractkit/chainlink-brownie-contracts@1.3.0
-          forge install foundry-rs/forge-std
 
       - name: Build
         run: forge build
 
       - name: Test
-        run: forge test --gas-report
+        run: forge test -vvv
+        env:
+          MAINNET_RPC_URL: ${{ secrets.MAINNET_RPC_URL }}
 
   coverage:
     name: Coverage
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Cache Foundry
-        uses: actions/cache@v4
-        with:
-          path: ~/.foundry
-          key: foundry-${{ runner.os }}-${{ hashFiles('foundry.toml') }}
-          restore-keys: |
-            foundry-${{ runner.os }}-
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: stable
 
-      - name: Install dependencies
-        run: |
-          forge install OpenZeppelin/openzeppelin-contracts
-          forge install smartcontractkit/chainlink-brownie-contracts@1.3.0
-          forge install foundry-rs/forge-std
-
       - name: Generate LCOV
-        run: forge coverage --report lcov
+        run: forge coverage --ir-minimum --report lcov
+        env:
+          MAINNET_RPC_URL: ${{ secrets.MAINNET_RPC_URL }}
 
-      - name: Enforce 90 percent coverage
+      - name: Enforce 90 percent src coverage
         run: |
-          node -e "const fs=require('fs'); const text=fs.readFileSync('lcov.info','utf8'); let lh=0, lf=0; for (const line of text.split(/\r?\n/)) { if (line.startsWith('LH:')) lh += Number(line.slice(3)); if (line.startsWith('LF:')) lf += Number(line.slice(3)); } const pct = lf === 0 ? 100 : (lh / lf) * 100; console.log('line coverage=' + pct.toFixed(2) + '%'); if (pct < 90) process.exit(1);"
+          node - <<'NODE'
+          const fs = require('fs');
+          const text = fs.readFileSync('lcov.info', 'utf8');
+
+          let hit = 0;
+          let found = 0;
+
+          for (const section of text.split('end_of_record')) {
+            const sf = section.match(/SF:(.*)/);
+            if (!sf) continue;
+
+            const file = sf[1].replace(/\\/g, '/');
+
+            if (!file.includes('/src/') && !file.startsWith('src/')) {
+              continue;
+            }
+
+            for (const line of section.split(/\r?\n/)) {
+              if (line.startsWith('LH:')) hit += Number(line.slice(3));
+              if (line.startsWith('LF:')) found += Number(line.slice(3));
+            }
+          }
+
+          const pct = found === 0 ? 100 : (hit / found) * 100;
+          console.log(`src line coverage = ${pct.toFixed(2)}% (${hit}/${found})`);
+
+          if (pct < 90) {
+            console.error('Coverage below 90% for src contracts');
+            process.exit(1);
+          }
+          NODE
 
   slither:
     name: Slither
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Cache Foundry
-        uses: actions/cache@v4
-        with:
-          path: ~/.foundry
-          key: foundry-${{ runner.os }}-${{ hashFiles('foundry.toml') }}
-          restore-keys: |
-            foundry-${{ runner.os }}-
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: stable
 
-      - name: Install dependencies
-        run: |
-          forge install OpenZeppelin/openzeppelin-contracts
-          forge install smartcontractkit/chainlink-brownie-contracts@1.3.0
-          forge install foundry-rs/forge-std
-
       - name: Install Slither
-        run: pip install slither-analyzer
+        run: pipx install slither-analyzer
 
       - name: Run Slither
-        run: slither src/ --fail-high --fail-medium
+        run: slither . --filter-paths "lib|test|script" --exclude-low --exclude-informational
 
   lint:
     name: Lint
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Cache Foundry
-        uses: actions/cache@v4
-        with:
-          path: ~/.foundry
-          key: foundry-${{ runner.os }}-${{ hashFiles('foundry.toml') }}
-          restore-keys: |
-            foundry-${{ runner.os }}-
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
