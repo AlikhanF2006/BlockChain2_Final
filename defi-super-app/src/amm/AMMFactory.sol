@@ -23,6 +23,7 @@ contract AMMFactory {
     }
 
     function createPair(address tokenA, address tokenB) external returns (address pair) {
+        // CEI: checks, effects, interactions.
         (address token0, address token1) = _sortTokens(tokenA, tokenB);
         if (getPair[token0][token1] != address(0)) revert PairExists();
 

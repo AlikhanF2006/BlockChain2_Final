@@ -48,10 +48,12 @@ contract ChainlinkAdapter is IChainlinkAdapter, Ownable {
     }
 
     function addFeed(address token, address feed) external onlyOwner {
+        // CEI: checks, effects, interactions.
         _addFeed(token, feed);
     }
 
     function setMaxStaleness(uint256 newMax) external onlyOwner {
+        // CEI: checks, effects, interactions.
         maxStaleness = newMax;
     }
 

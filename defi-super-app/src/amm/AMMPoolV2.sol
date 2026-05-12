@@ -25,6 +25,7 @@ contract AMMPoolV2 is AMMPool {
     event ProtocolFeeSet(bool enabled, address indexed feeTo);
 
     function setProtocolFee(bool enabled, address _feeTo) external onlyOwner {
+        // CEI: checks, effects, interactions.
         if (enabled && _feeTo == address(0)) revert InvalidToken();
         protocolFeeEnabled = enabled;
         feeTo = _feeTo;

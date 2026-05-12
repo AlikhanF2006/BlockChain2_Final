@@ -30,6 +30,7 @@ contract YieldVault is
     }
 
     function initialize(address asset_, address lendingPool_) external initializer {
+        // CEI: checks, effects, interactions.
         __ERC20_init("DeFi Yield Vault", "DYV");
         __ERC4626_init(IERC20(asset_));
         __Ownable_init(msg.sender);
@@ -41,10 +42,12 @@ contract YieldVault is
     }
 
     function pause() external onlyOwner {
+        // CEI: checks, effects, interactions.
         _pause();
     }
 
     function unpause() external onlyOwner {
+        // CEI: checks, effects, interactions.
         _unpause();
     }
 

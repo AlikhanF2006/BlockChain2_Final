@@ -7,6 +7,7 @@ import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Ini
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {ReentrancyGuardUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
+import {PausableUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 
 import {ChainlinkAdapter} from "../oracle/ChainlinkAdapter.sol";
 import {InterestRateModel} from "./InterestRateModel.sol";
@@ -17,22 +18,23 @@ import {InterestRateModel} from "./InterestRateModel.sol";
 /// slot 0: Initializable bookkeeping
 /// slot 1: OwnableUpgradeable owner
 /// slot 2: ReentrancyGuardUpgradeable status
-/// slot 3: mapping _deposits
-/// slot 4: mapping borrows
-/// slot 5: mapping borrowIndex
-/// slot 6: mapping collateralBalance
-/// slot 7: mapping depositIndex
-/// slot 8: totalDeposits
-/// slot 9: totalBorrows
-/// slot 10: globalBorrowIndex
-/// slot 11: globalDepositIndex
-/// slot 12: lastAccrualTimestamp
-/// slot 13: oracle
-/// slot 14: interestRateModel
-/// slot 15: collateralToken
-/// slot 16: borrowToken
-/// Future versions must append storage after slot 16.
-contract LendingPool is Initializable, OwnableUpgradeable, UUPSUpgradeable, ReentrancyGuardUpgradeable {
+/// slot 3: PausableUpgradeable paused flag
+/// slot 4: mapping _deposits
+/// slot 5: mapping borrows
+/// slot 6: mapping borrowIndex
+/// slot 7: mapping collateralBalance
+/// slot 8: mapping depositIndex
+/// slot 9: totalDeposits
+/// slot 10: totalBorrows
+/// slot 11: globalBorrowIndex
+/// slot 12: globalDepositIndex
+/// slot 13: lastAccrualTimestamp
+/// slot 14: oracle
+/// slot 15: interestRateModel
+/// slot 16: collateralToken
+/// slot 17: borrowToken
+/// Future versions must append storage after slot 17.
+contract LendingPool is Initializable, OwnableUpgradeable, UUPSUpgradeable, ReentrancyGuardUpgradeable, PausableUpgradeable {
     using SafeERC20 for IERC20;
 
     error InsufficientBalance();
@@ -92,6 +94,7 @@ contract LendingPool is Initializable, OwnableUpgradeable, UUPSUpgradeable, Reen
         __Ownable_init(msg.sender);
         __UUPSUpgradeable_init();
         __ReentrancyGuard_init();
+        __Pausable_init();
 
         collateralToken = _collateralToken;
         borrowToken = _borrowToken;
@@ -127,6 +130,7 @@ contract LendingPool is Initializable, OwnableUpgradeable, UUPSUpgradeable, Reen
     }
 
     function deposit(uint256 amount) external nonReentrant {
+        // CEI: checks, effects, interactions.
         if (amount == 0) revert InvalidAmount();
         accrueInterest();
         _accrueDepositor(msg.sender);
@@ -139,6 +143,7 @@ contract LendingPool is Initializable, OwnableUpgradeable, UUPSUpgradeable, Reen
     }
 
     function withdraw(uint256 amount) external nonReentrant {
+        // CEI: checks, effects, interactions.
         if (amount == 0) revert InvalidAmount();
         accrueInterest();
         _accrueDepositor(msg.sender);
@@ -153,6 +158,7 @@ contract LendingPool is Initializable, OwnableUpgradeable, UUPSUpgradeable, Reen
     }
 
     function depositCollateral(uint256 amount) external nonReentrant {
+        // CEI: checks, effects, interactions.
         if (amount == 0) revert InvalidAmount();
         accrueInterest();
 
@@ -163,6 +169,7 @@ contract LendingPool is Initializable, OwnableUpgradeable, UUPSUpgradeable, Reen
     }
 
     function withdrawCollateral(uint256 amount) external nonReentrant {
+        // CEI: checks, effects, interactions.
         if (amount == 0) revert InvalidAmount();
         accrueInterest();
         if (collateralBalance[msg.sender] < amount) revert InsufficientBalance();
@@ -174,7 +181,8 @@ contract LendingPool is Initializable, OwnableUpgradeable, UUPSUpgradeable, Reen
         emit CollateralWithdrawn(msg.sender, amount);
     }
 
-    function borrow(uint256 amount) external nonReentrant {
+    function borrow(uint256 amount) external nonReentrant whenNotPaused {
+        // CEI: checks, effects, interactions.
         if (amount == 0) revert InvalidAmount();
         accrueInterest();
         if (_availableLiquidity() < amount) revert InsufficientLiquidity();
@@ -192,6 +200,7 @@ contract LendingPool is Initializable, OwnableUpgradeable, UUPSUpgradeable, Reen
     }
 
     function repay(uint256 amount) external nonReentrant {
+        // CEI: checks, effects, interactions.
         if (amount == 0) revert InvalidAmount();
         accrueInterest();
 
@@ -209,6 +218,7 @@ contract LendingPool is Initializable, OwnableUpgradeable, UUPSUpgradeable, Reen
     }
 
     function liquidate(address borrower, uint256 repayAmount) external nonReentrant {
+        // CEI: checks, effects, interactions.
         if (repayAmount == 0) revert InvalidAmount();
         accrueInterest();
         if (getHealthFactor(borrower) >= WAD) revert HealthyPosition();
@@ -260,6 +270,16 @@ contract LendingPool is Initializable, OwnableUpgradeable, UUPSUpgradeable, Reen
 
     function availableLiquidity() external view returns (uint256) {
         return _availableLiquidity();
+    }
+
+    function pause() external onlyOwner {
+        // CEI: checks, effects, interactions.
+        _pause();
+    }
+
+    function unpause() external onlyOwner {
+        // CEI: checks, effects, interactions.
+        _unpause();
     }
 
     function _availableLiquidity() internal view returns (uint256) {

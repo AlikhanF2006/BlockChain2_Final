@@ -31,6 +31,7 @@ contract LPToken is ERC20 {
     /// @param to Account receiving newly minted LP shares.
     /// @param amount Number of LP shares to mint.
     function mint(address to, uint256 amount) external onlyAMM {
+        // CEI: checks, effects, interactions.
         _mint(to, amount);
     }
 
@@ -39,6 +40,7 @@ contract LPToken is ERC20 {
     /// @param from Account whose LP shares are burned.
     /// @param amount Number of LP shares to burn.
     function burn(address from, uint256 amount) external onlyAMM {
+        // CEI: checks, effects, interactions.
         _burn(from, amount);
     }
 

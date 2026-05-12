@@ -55,6 +55,7 @@ contract AMMPool is Initializable, OwnableUpgradeable, UUPSUpgradeable, Reentran
     }
 
     function initialize(address _tokenA, address _tokenB, address _lpToken) external initializer {
+        // CEI: checks, effects, interactions.
         if (_tokenA == address(0) || _tokenB == address(0) || _lpToken == address(0) || _tokenA == _tokenB) {
             revert InvalidToken();
         }
@@ -76,6 +77,7 @@ contract AMMPool is Initializable, OwnableUpgradeable, UUPSUpgradeable, Reentran
         address to,
         uint256 deadline
     ) external nonReentrant returns (uint256 amountA, uint256 amountB, uint256 liquidity) {
+        // CEI: checks, effects, interactions.
         if (block.timestamp > deadline) revert DeadlineExpired();
         if (amountADesired == 0 || amountBDesired == 0 || to == address(0)) revert InsufficientAmount();
 
@@ -117,6 +119,7 @@ contract AMMPool is Initializable, OwnableUpgradeable, UUPSUpgradeable, Reentran
         nonReentrant
         returns (uint256 amountA, uint256 amountB)
     {
+        // CEI: checks, effects, interactions.
         if (block.timestamp > deadline) revert DeadlineExpired();
         if (liquidity == 0 || to == address(0)) revert InsufficientAmount();
 
@@ -142,6 +145,7 @@ contract AMMPool is Initializable, OwnableUpgradeable, UUPSUpgradeable, Reentran
         nonReentrant
         returns (uint256 amountOut)
     {
+        // CEI: checks, effects, interactions.
         if (block.timestamp > deadline) revert DeadlineExpired();
         if (amountIn == 0 || to == address(0)) revert InsufficientAmount();
 

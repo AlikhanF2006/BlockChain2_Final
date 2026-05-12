@@ -25,6 +25,7 @@ contract GovToken is ERC20, ERC20Permit, ERC20Votes, AccessControl {
     /// @param to Account receiving the minted tokens.
     /// @param amount Number of tokens to mint.
     function mint(address to, uint256 amount) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        // CEI: checks, effects, interactions.
         _mint(to, amount);
     }
 
