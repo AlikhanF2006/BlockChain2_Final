@@ -177,10 +177,7 @@ contract Deploy is Script {
         return new YieldVault();
     }
 
-    function _deployProxy(bytes32, address implementation, bytes memory initData)
-        internal
-        returns (address proxy)
-    {
+    function _deployProxy(bytes32, address implementation, bytes memory initData) internal returns (address proxy) {
         return address(new ERC1967Proxy(implementation, initData));
     }
 
