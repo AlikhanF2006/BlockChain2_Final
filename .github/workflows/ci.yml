@@ -157,7 +157,7 @@ jobs:
 
       - name: Install subgraph dependencies
         working-directory: subgraph
-        run: npm ci
+        run: npm install
 
       - name: Generate subgraph types
         working-directory: subgraph
