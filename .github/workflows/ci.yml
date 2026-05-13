@@ -116,4 +116,53 @@ jobs:
 
       - name: Lint Solidity
         run: forge fmt --check
-        
+
+  frontend:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
+
+  subgraph:
+    name: Subgraph Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: subgraph/package-lock.json
+
+      - name: Install subgraph dependencies
+        working-directory: subgraph
+        run: npm ci
+
+      - name: Generate subgraph types
+        working-directory: subgraph
+        run: npm run codegen
+
+      - name: Build subgraph
+        working-directory: subgraph
+        run: npm run build
