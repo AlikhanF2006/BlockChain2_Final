@@ -21,9 +21,9 @@ dataSources:
     name: AMMPool
     network: arbitrum-sepolia
     source:
-      address: "0x0000000000000000000000000000000000000001"
+      address: "0x61165963D67bEbd3e5C1BEad6d0C9D849f13A35B"
       abi: AMMPool
-      startBlock: 0
+      startBlock: 268120567
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -48,9 +48,9 @@ dataSources:
     name: LendingPool
     network: arbitrum-sepolia
     source:
-      address: "0x0000000000000000000000000000000000000002"
+      address: "0x052BD2B635369c231E954A1F34A49d5182184877"
       abi: LendingPool
-      startBlock: 0
+      startBlock: 268120549
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -81,9 +81,9 @@ dataSources:
     name: YieldVault
     network: arbitrum-sepolia
     source:
-      address: "0x0000000000000000000000000000000000000003"
+      address: "0xdbCdEcEF8c567b691e072200420f3f324971fd68"
       abi: YieldVault
-      startBlock: 0
+      startBlock: 268120557
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -103,9 +103,9 @@ dataSources:
     name: DeFiGovernor
     network: arbitrum-sepolia
     source:
-      address: "0x0000000000000000000000000000000000000004"
+      address: "0xf223786104C878Bbf1D8a0b036DD07DB32Fa3DDf"
       abi: DeFiGovernor
-      startBlock: 0
+      startBlock: 268120531
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
