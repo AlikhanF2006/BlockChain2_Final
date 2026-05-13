@@ -27,6 +27,22 @@ export function LiquidityPanel() {
     setAmountB(formatUnits((a * reserves[1]) / reserves[0], 18));
   }
 
+  async function addLiquidity() {
+    const hash = await tx.run("Adding liquidity...", () =>
+      writeContractAsync({
+        address: addresses.ammPool,
+        abi: ammAbi,
+        functionName: "addLiquidity",
+        args: [parsedA, parsedB, 0n, 0n, address!, BigInt(Math.floor(Date.now() / 1000) + 1200)],
+        gas: 500_000n,
+        maxFeePerGas: 500_000_000n,
+        maxPriorityFeePerGas: 0n
+      })
+    );
+
+    if (hash) await reads.refetch();
+  }
+
   return (
     <section className="panel">
       <div className="panel-title">
@@ -39,19 +55,7 @@ export function LiquidityPanel() {
         <span>LP tokens to receive</span>
         <strong>{formatUnits(estimatedLp, 18)}</strong>
       </div>
-      <button
-        disabled={!address || parsedA === 0n || parsedB === 0n}
-        onClick={() =>
-          tx.run("Adding liquidity...", () =>
-            writeContractAsync({
-              address: addresses.ammPool,
-              abi: ammAbi,
-              functionName: "addLiquidity",
-              args: [parsedA, parsedB, 0n, 0n, address!, BigInt(Math.floor(Date.now() / 1000) + 1200)]
-            })
-          )
-        }
-      >
+      <button disabled={!address || parsedA === 0n || parsedB === 0n} onClick={addLiquidity}>
         Add Liquidity
       </button>
       {tx.status && <p className="status">{tx.status}</p>}

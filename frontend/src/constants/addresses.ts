@@ -77,6 +77,20 @@ export const erc20Abi = [
 export const ammAbi = [
   {
     type: "function",
+    name: "tokenA",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "address" }]
+  },
+  {
+    type: "function",
+    name: "tokenB",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "address" }]
+  },
+  {
+    type: "function",
     name: "getReserves",
     stateMutability: "view",
     inputs: [],
@@ -134,6 +148,20 @@ export const lendingAbi = [
   {
     type: "function",
     name: "getHealthFactor",
+    stateMutability: "view",
+    inputs: [{ name: "user", type: "address" }],
+    outputs: [{ type: "uint256" }]
+  },
+  {
+    type: "function",
+    name: "collateralBalance",
+    stateMutability: "view",
+    inputs: [{ name: "user", type: "address" }],
+    outputs: [{ type: "uint256" }]
+  },
+  {
+    type: "function",
+    name: "borrows",
     stateMutability: "view",
     inputs: [{ name: "user", type: "address" }],
     outputs: [{ type: "uint256" }]

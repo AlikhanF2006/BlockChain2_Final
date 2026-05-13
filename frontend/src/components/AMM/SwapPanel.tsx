@@ -56,7 +56,10 @@ export function SwapPanel() {
                 address: tokenIn,
                 abi: erc20Abi,
                 functionName: "approve",
-                args: [addresses.ammPool, amm.amount]
+                args: [addresses.ammPool, amm.amount],
+                gas: 300_000n,
+                maxFeePerGas: 500_000_000n,
+                maxPriorityFeePerGas: 0n
               })
             )
           }
@@ -71,7 +74,10 @@ export function SwapPanel() {
                 address: addresses.ammPool,
                 abi: ammAbi,
                 functionName: "swapExactTokensForTokens",
-                args: [amm.amount, minOut, tokenIn, address!, BigInt(Math.floor(Date.now() / 1000) + 1200)]
+                args: [amm.amount, minOut, tokenIn, address!, BigInt(Math.floor(Date.now() / 1000) + 1200)],
+                gas: 300_000n,
+                maxFeePerGas: 500_000_000n,
+                maxPriorityFeePerGas: 0n
               })
             )
           }

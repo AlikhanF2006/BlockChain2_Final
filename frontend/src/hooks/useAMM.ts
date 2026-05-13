@@ -14,6 +14,18 @@ export function useAMM(tokenIn: Address, amountText: string) {
     functionName: "getReserves"
   });
 
+  const poolTokenA = useReadContract({
+    address: addresses.ammPool,
+    abi: ammAbi,
+    functionName: "tokenA"
+  });
+
+  const poolTokenB = useReadContract({
+    address: addresses.ammPool,
+    abi: ammAbi,
+    functionName: "tokenB"
+  });
+
   const balance = useReadContract({
     address: tokenIn,
     abi: erc20Abi,
@@ -32,10 +44,19 @@ export function useAMM(tokenIn: Address, amountText: string) {
 
   const [reserveIn, reserveOut] = useMemo(() => {
     const data = reserves.data;
-    if (!data) return [0n, 0n];
+    const onchainTokenA = poolTokenA.data?.toLowerCase();
+    const onchainTokenB = poolTokenB.data?.toLowerCase();
+
+    if (!data || !onchainTokenA || !onchainTokenB) return [0n, 0n];
+
     const [reserveA, reserveB] = data;
-    return tokenIn.toLowerCase() === addresses.tokenA.toLowerCase() ? [reserveA, reserveB] : [reserveB, reserveA];
-  }, [reserves.data, tokenIn]);
+    const selected = tokenIn.toLowerCase();
+
+    if (selected === onchainTokenA) return [reserveA, reserveB];
+    if (selected === onchainTokenB) return [reserveB, reserveA];
+
+    return [0n, 0n];
+  }, [reserves.data, poolTokenA.data, poolTokenB.data, tokenIn]);
 
   const quote = useMemo(() => {
     if (amount === 0n || reserveIn === 0n || reserveOut === 0n) return 0n;
