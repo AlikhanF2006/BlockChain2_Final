@@ -170,27 +170,18 @@ contract Deploy is Script {
     }
 
     function _deployLendingImplementation() internal returns (LendingPool implementation) {
-        address predicted = vm.computeCreate2Address(LENDING_IMPL_SALT, keccak256(type(LendingPool).creationCode));
-        if (predicted.code.length > 0) return LendingPool(predicted);
-        return new LendingPool{salt: LENDING_IMPL_SALT}();
+        return new LendingPool();
     }
 
     function _deployVaultImplementation() internal returns (YieldVault implementation) {
-        address predicted = vm.computeCreate2Address(VAULT_IMPL_SALT, keccak256(type(YieldVault).creationCode));
-        if (predicted.code.length > 0) return YieldVault(predicted);
-        return new YieldVault{salt: VAULT_IMPL_SALT}();
+        return new YieldVault();
     }
 
-    function _deployProxy(bytes32 salt, address implementation, bytes memory initData)
+    function _deployProxy(bytes32, address implementation, bytes memory initData)
         internal
         returns (address proxy)
     {
-        bytes memory creationCode = abi.encodePacked(
-            type(ERC1967Proxy).creationCode, abi.encode(implementation, initData)
-        );
-        address predicted = vm.computeCreate2Address(salt, keccak256(creationCode));
-        if (predicted.code.length > 0) return predicted;
-        return address(new ERC1967Proxy{salt: salt}(implementation, initData));
+        return address(new ERC1967Proxy(implementation, initData));
     }
 
     function _writeDeployments() internal {

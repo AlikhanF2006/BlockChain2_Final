@@ -1,45 +1,17 @@
 {
   "network": "arbitrum-sepolia",
   "chainId": 421614,
-  "deployedAt": "<block number>",
+  "deployedAt": "10847014",
   "contracts": {
-    "GovToken": {
-      "address": "0x0000000000000000000000000000000000000000",
-      "blockExplorer": "https://sepolia.arbiscan.io/address/0x0000000000000000000000000000000000000000"
-    },
-    "InterestRateModel": {
-      "address": "0x0000000000000000000000000000000000000000",
-      "blockExplorer": "https://sepolia.arbiscan.io/address/0x0000000000000000000000000000000000000000"
-    },
-    "AMMFactory": {
-      "address": "0x0000000000000000000000000000000000000000",
-      "blockExplorer": "https://sepolia.arbiscan.io/address/0x0000000000000000000000000000000000000000"
-    },
-    "AMMPool": {
-      "address": "0x0000000000000000000000000000000000000000",
-      "blockExplorer": "https://sepolia.arbiscan.io/address/0x0000000000000000000000000000000000000000"
-    },
-    "LendingPool": {
-      "proxy": "0x0000000000000000000000000000000000000000",
-      "implementation": "0x0000000000000000000000000000000000000000",
-      "blockExplorer": "https://sepolia.arbiscan.io/address/0x0000000000000000000000000000000000000000"
-    },
-    "YieldVault": {
-      "proxy": "0x0000000000000000000000000000000000000000",
-      "implementation": "0x0000000000000000000000000000000000000000",
-      "blockExplorer": "https://sepolia.arbiscan.io/address/0x0000000000000000000000000000000000000000"
-    },
-    "DeFiTimelock": {
-      "address": "0x0000000000000000000000000000000000000000",
-      "blockExplorer": "https://sepolia.arbiscan.io/address/0x0000000000000000000000000000000000000000"
-    },
-    "DeFiGovernor": {
-      "address": "0x0000000000000000000000000000000000000000",
-      "blockExplorer": "https://sepolia.arbiscan.io/address/0x0000000000000000000000000000000000000000"
-    },
-    "ChainlinkAdapter": {
-      "address": "0x0000000000000000000000000000000000000000",
-      "blockExplorer": "https://sepolia.arbiscan.io/address/0x0000000000000000000000000000000000000000"
-    }
+    "GovToken": {"address":"0xd86d5004815e58451100A2Ba9a9A35B8d11b94e2","blockExplorer":"https://sepolia.arbiscan.io/address/0xd86d5004815e58451100A2Ba9a9A35B8d11b94e2"},
+    "InterestRateModel": {"address":"0x95c9feE44D295331527648F581762386F7a1E65C","blockExplorer":"https://sepolia.arbiscan.io/address/0x95c9feE44D295331527648F581762386F7a1E65C"},
+    "ChainlinkAdapter": {"address":"0x86ac334fC8B6bF231604d8B64A84c9Ef6962d775","blockExplorer":"https://sepolia.arbiscan.io/address/0x86ac334fC8B6bF231604d8B64A84c9Ef6962d775"},
+    "AMMFactory": {"address":"0xFC6CDB0Bd25c2146464fdB7b6fb53FEd3C8Be9a4","blockExplorer":"https://sepolia.arbiscan.io/address/0xFC6CDB0Bd25c2146464fdB7b6fb53FEd3C8Be9a4"},
+    "AMMPool": {"address":"0x61165963D67bEbd3e5C1BEad6d0C9D849f13A35B","blockExplorer":"https://sepolia.arbiscan.io/address/0x61165963D67bEbd3e5C1BEad6d0C9D849f13A35B"},
+    "DeFiTimelock": {"address":"0xC9B50035aD84808AbE6b83fb148562A8B97B46F6","blockExplorer":"https://sepolia.arbiscan.io/address/0xC9B50035aD84808AbE6b83fb148562A8B97B46F6"},
+    "DeFiGovernor": {"address":"0xf223786104C878Bbf1D8a0b036DD07DB32Fa3DDf","blockExplorer":"https://sepolia.arbiscan.io/address/0xf223786104C878Bbf1D8a0b036DD07DB32Fa3DDf"},
+    "LendingPool": {"proxy":"0x052BD2B635369c231E954A1F34A49d5182184877","implementation":"0xE86C7b40573c0F2cc3Be989801582D209FC90Cdb","blockExplorer":"https://sepolia.arbiscan.io/address/0x052BD2B635369c231E954A1F34A49d5182184877"},
+    "YieldVault": {"proxy":"0xdbCdEcEF8c567b691e072200420f3f324971fd68","implementation":"0x87Fa5BC9CadFEfc30485716f9DDBb9A0BCBEAe73","blockExplorer":"https://sepolia.arbiscan.io/address/0xdbCdEcEF8c567b691e072200420f3f324971fd68"}
+
   }
 }
