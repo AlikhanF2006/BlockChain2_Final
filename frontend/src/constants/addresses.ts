@@ -71,7 +71,14 @@ export const erc20Abi = [
       { name: "timepoint", type: "uint256" }
     ],
     outputs: [{ type: "uint256" }]
-  }
+  },
+  {
+    type: "function",
+    name: "delegate",
+    stateMutability: "nonpayable",
+    inputs: [{ name: "delegatee", type: "address" }],
+    outputs: []
+  },
 ] as const;
 
 export const ammAbi = [

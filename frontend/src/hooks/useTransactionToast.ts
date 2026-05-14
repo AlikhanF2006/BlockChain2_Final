@@ -15,12 +15,10 @@ function friendlyError(error: unknown): string {
   const revert = err?.walk?.((cause) => cause instanceof ContractFunctionRevertedError);
   if (revert instanceof ContractFunctionRevertedError) {
     const name = revert.data?.errorName;
-    if (name === "InsufficientOutputAmount") return "Slippage too high - try increasing tolerance";
-    if (name === "DeadlineExpired") return "Transaction took too long - please retry";
     if (name) return `Transaction failed: ${name}`;
   }
 
-  return `Transaction failed: ${message.slice(0, 80)}`;
+  return `Transaction failed: ${message.slice(0, 100)}`;
 }
 
 export function useTransactionToast() {
@@ -44,13 +42,15 @@ export function useTransactionToast() {
 
         if (receipt.status === "success") {
           setStatus("Confirmed");
-        } else {
-          setStatus("Transaction failed on-chain");
+          return txHash;
         }
-      } else {
-        setStatus("Submitted");
+
+        setStatus("Transaction failed on-chain");
+        setHash(undefined);
+        return undefined;
       }
 
+      setStatus("Submitted");
       return txHash;
     } catch (error) {
       setStatus(friendlyError(error));
