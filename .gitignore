@@ -47,3 +47,5 @@ temp/
 frontend/tsconfig.tsbuildinfo
 subgraph/generated/
 subgraph/build/
+
+frontend/.env.local
