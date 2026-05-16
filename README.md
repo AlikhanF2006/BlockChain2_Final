@@ -1,209 +1,167 @@
 # DeFi Super-App
 
-DeFi Super-App is a full-stack Solidity and React protocol built for Arbitrum Sepolia. It includes governance tokens, a constant-product AMM, lending market, ERC-4626 yield vault, Chainlink oracle adapter, DAO governance, timelock treasury control, The Graph indexer, and a wagmi/RainbowKit frontend.
+DeFi Super-App is a full-stack decentralized protocol developed for the Blockchain Technologies 2 Final Project.
 
-## Architecture
+The project follows **Option A — DeFi Super-App** and combines an AMM, lending protocol, ERC-4626 yield vault, Chainlink-style oracle integration, DAO governance, The Graph subgraph, and React frontend.
 
-```mermaid
-flowchart LR
-  User[Users]
-  Frontend[React dApp]
-  Graph[The Graph]
-  subgraph Chain[Arbitrum Sepolia]
-    GovToken[GovToken]
-    AMM[AMMPool]
-    Lending[LendingPool]
-    Vault[YieldVault]
-    Oracle[ChainlinkAdapter]
-    Governor[DeFiGovernor]
-    Timelock[DeFiTimelock]
-    Treasury[Treasury]
-  end
-  Chainlink[Chainlink Feeds]
+The protocol is deployed and verified on **Arbitrum Sepolia**.
 
-  User --> Frontend
-  Frontend --> AMM
-  Frontend --> Lending
-  Frontend --> Vault
-  Frontend --> Governor
-  AMM -. events .-> Graph
-  Lending -. events .-> Graph
-  Vault -. events .-> Graph
-  Governor -. events .-> Graph
-  Graph --> Frontend
-  Lending --> Oracle
-  Oracle --> Chainlink
-  GovToken --> Governor
-  Governor --> Timelock
-  Timelock --> Lending
-  Timelock --> Vault
-  Timelock --> Treasury
-```
+---
 
-More detail:
+## 1. Project Overview
 
-- `docs/ARCHITECTURE.md`
-- `docs/SECURITY_AUDIT.md`
-- `docs/GAS_REPORT.md`
+This repository contains a complete decentralized protocol with smart contracts, tests, frontend, subgraph, deployment scripts, verified contract addresses, CI checks, and final documentation.
 
-## Contracts
+Main protocol parts:
 
-| Area | Contracts |
-| --- | --- |
-| Tokens | `GovToken`, `LPToken` |
-| AMM | `AMMPool`, `AMMPoolV2`, `AMMFactory` |
-| Lending | `LendingPool`, `InterestRateModel` |
-| Vault | `YieldVault` |
-| Oracle | `ChainlinkAdapter` |
-| Governance | `DeFiGovernor`, `DeFiTimelock`, `Treasury` |
+- Constant-product AMM with LP tokens and slippage protection
+- Lending pool with collateral, borrowing, repayment, health factor, and liquidation logic
+- ERC-4626 tokenized yield vault
+- Chainlink-style oracle adapter with stale price protection
+- ERC20Votes + ERC20Permit governance token
+- OpenZeppelin Governor + TimelockController DAO
+- UUPS upgradeable contracts
+- Factory contract using CREATE and CREATE2
+- Inline Yul assembly benchmarked against Solidity
+- The Graph subgraph for indexing protocol events
+- React + Wagmi frontend for user interaction
 
-## Quick Start
+---
 
-Install Foundry:
+## 2. Key Features
 
-```bash
-curl -L https://foundry.paradigm.xyz | bash
-foundryup
-```
+- AMM token swap
+- Add liquidity to AMM pool
+- Lending deposit, borrow, repay, and collateral withdrawal
+- ERC-4626 vault deposit and withdrawal
+- DAO self-delegation
+- Governance proposal creation
+- Proposal state tracking
+- Chainlink oracle price validation
+- Slippage protection
+- Reentrancy protection
+- Access-controlled privileged functions
+- Subgraph indexing for protocol events
+- GitHub Actions CI pipeline
 
-Install dependencies:
+---
 
-```bash
-forge install OpenZeppelin/openzeppelin-contracts
-forge install OpenZeppelin/openzeppelin-contracts-upgradeable
-forge install foundry-rs/forge-std
-```
+## 3. Technology Stack
 
-Build and test:
+| Layer | Technology |
+|---|---|
+| Smart Contracts | Solidity, Foundry, OpenZeppelin |
+| Frontend | React, TypeScript, Wagmi, Viem |
+| Indexing | The Graph |
+| Oracle | Chainlink-style AggregatorV3 adapter |
+| Network | Arbitrum Sepolia |
+| Testing | Foundry |
+| Security | Slither, manual review |
+| CI/CD | GitHub Actions |
 
-```bash
-forge build
-forge test
-```
+---
 
-Run coverage:
+## 4. Architecture Overview
 
-```bash
-forge coverage
-```
+The protocol contains the following main components:
 
-Coverage output should be saved to:
+| Component | Purpose |
+|---|---|
+| GovToken | ERC20Votes + ERC20Permit governance token |
+| DeFiGovernor | DAO governance contract |
+| DeFiTimelock | TimelockController with 2-day delay |
+| AMMFactory | Factory contract using CREATE and CREATE2 |
+| AMMPool | Constant-product AMM pool |
+| LendingPool | Upgradeable lending protocol |
+| YieldVault | ERC-4626 vault |
+| ChainlinkAdapter | Oracle adapter with stale price checks |
+| InterestRateModel | Linear interest rate model |
+| The Graph Subgraph | Indexes protocol events |
+| React dApp | User interface for protocol interaction |
 
-```bash
-coverage/coverage.md
-```
+Main user flows:
 
-## Environment Setup
+- User connects wallet through the React dApp.
+- The frontend interacts with deployed contracts on Arbitrum Sepolia.
+- Protocol contracts emit events.
+- The Graph indexes protocol events.
+- The frontend can read indexed protocol data from the subgraph.
+- LendingPool and YieldVault use ChainlinkAdapter for price validation.
+- GovToken, DeFiGovernor, and DeFiTimelock control governance actions.
 
-Create `.env`:
+Full architecture diagrams, sequence diagrams, storage layout, trust assumptions, and design decisions are included in the final project report.
 
-```bash
-DEPLOYER_ADDRESS=0xYourDeployer
-PRIVATE_KEY=0xYourPrivateKey
-ARBITRUM_SEPOLIA_RPC_URL=https://sepolia-rollup.arbitrum.io/rpc
-MAINNET_RPC_URL=https://eth-mainnet.g.alchemy.com/v2/YOUR_KEY
-TOKEN_A=0xTokenA
-TOKEN_B=0xTokenB
-COLLATERAL_TOKEN=0xCollateralToken
-BORROW_TOKEN=0xBorrowToken
-BENCHMARK_USER=0xBenchmarkUser
-```
+---
 
-Load the environment:
+## 5. Verified Contracts — Arbitrum Sepolia
 
-```bash
-source .env
-```
+| Contract | Address | Arbiscan |
+|---|---|---|
+| GovToken | `0xd86d5004815e58451100A2Ba9a9A35B8d11b94e2` | [View](https://sepolia.arbiscan.io/address/0xd86d5004815e58451100A2Ba9a9A35B8d11b94e2) |
+| InterestRateModel | `0x95c9feE44D295331527648F581762386F7a1E65C` | [View](https://sepolia.arbiscan.io/address/0x95c9feE44D295331527648F581762386F7a1E65C) |
+| ChainlinkAdapter | `0x86ac334fC8B6bF231604d8B64A84c9Ef6962d775` | [View](https://sepolia.arbiscan.io/address/0x86ac334fC8B6bF231604d8B64A84c9Ef6962d775) |
+| AMMFactory | `0xFC6CDB0Bd25c2146464fdB7b6fb53FEd3C8Be9a4` | [View](https://sepolia.arbiscan.io/address/0xFC6CDB0Bd25c2146464fdB7b6fb53FEd3C8Be9a4) |
+| AMMPool | `0x61165963D67bEbd3e5C1BEad6d0C9D849f13A35B` | [View](https://sepolia.arbiscan.io/address/0x61165963D67bEbd3e5C1BEad6d0C9D849f13A35B) |
+| DeFiTimelock | `0xC9B50035aD84808AbE6b83fb148562A8B97B46F6` | [View](https://sepolia.arbiscan.io/address/0xC9B50035aD84808AbE6b83fb148562A8B97B46F6) |
+| DeFiGovernor | `0xf223786104C878Bbf1D8a0b036DD07DB32Fa3DDf` | [View](https://sepolia.arbiscan.io/address/0xf223786104C878Bbf1D8a0b036DD07DB32Fa3DDf) |
+| LendingPool Proxy | `0x052BD2B635369c231E954A1F34A49d5182184877` | [View](https://sepolia.arbiscan.io/address/0x052BD2B635369c231E954A1F34A49d5182184877) |
+| LendingPool Implementation | `0xE86C7b40573c0F2cc3Be989801582D209FC90Cdb` | [View](https://sepolia.arbiscan.io/address/0xE86C7b40573c0F2cc3Be989801582D209FC90Cdb) |
+| YieldVault Proxy | `0xdbCdEcEF8c567b691e072200420f3f324971fd68` | [View](https://sepolia.arbiscan.io/address/0xdbCdEcEF8c567b691e072200420f3f324971fd68) |
+| YieldVault Implementation | `0x87Fa5BC9CadFEfc30485716f9DDBb9A0BCBEAe73` | [View](https://sepolia.arbiscan.io/address/0x87Fa5BC9CadFEfc30485716f9DDBb9A0BCBEAe73) |
 
-On PowerShell:
+Full deployment data is stored in:
 
-```powershell
-$env:DEPLOYER_ADDRESS="0xYourDeployer"
-$env:PRIVATE_KEY="0xYourPrivateKey"
-$env:ARBITRUM_SEPOLIA_RPC_URL="https://sepolia-rollup.arbitrum.io/rpc"
-```
+`deployments/421614.json`
 
-## Deployment
+---
 
-Deployment script:
+## 6. Subgraph
 
-```bash
-forge script script/Deploy.s.sol:Deploy \
-  --rpc-url $ARBITRUM_SEPOLIA_RPC_URL \
-  --private-key $PRIVATE_KEY \
-  --broadcast \
-  --verify
-```
+The project includes The Graph subgraph configuration:
 
-Post-deployment verification:
+- `subgraph/subgraph.yaml`
+- `subgraph/schema.graphql`
+- `subgraph/src/`
+
+Subgraph endpoint:
+
+`https://api.studio.thegraph.com/query/1753299/defi-super-app/v0.0.1`
+
+Build subgraph:
 
 ```bash
-forge script script/Verify.s.sol:Verify \
-  --rpc-url $ARBITRUM_SEPOLIA_RPC_URL
-```
-
-Gas benchmark:
-
-```bash
-forge script script/GasBenchmark.s.sol:GasBenchmark
-```
-
-Deployment output:
-
-- `deployments/421614.json`
-
-## Deployed Contract Addresses
-
-Arbitrum Sepolia deployment template:
-
-| Contract | Address |
-| --- | --- |
-| GovToken | `0x0000000000000000000000000000000000000000` |
-| InterestRateModel | `0x0000000000000000000000000000000000000000` |
-| ChainlinkAdapter | `0x0000000000000000000000000000000000000000` |
-| AMMFactory | `0x0000000000000000000000000000000000000000` |
-| AMMPool | `0x0000000000000000000000000000000000000000` |
-| LendingPool Proxy | `0x0000000000000000000000000000000000000000` |
-| YieldVault Proxy | `0x0000000000000000000000000000000000000000` |
-| DeFiTimelock | `0x0000000000000000000000000000000000000000` |
-| DeFiGovernor | `0x0000000000000000000000000000000000000000` |
-
-Arbiscan links are generated in `deployments/421614.json`.
-
-## Subgraph
-
-Subgraph directory:
-
-```bash
-subgraph/
-```
-
-Install Graph CLI and dependencies:
-
-```bash
-npm install -g @graphprotocol/graph-cli
 cd subgraph
-graph codegen
-graph build
+npm install
+npm run codegen
+npm run build
 ```
 
-Subgraph endpoint URL:
+The subgraph indexes protocol events and is used for protocol data reading and analysis.
 
-```text
-https://api.studio.thegraph.com/query/00000/defi-super-app/version/latest
-```
+---
 
-Replace the placeholder with the deployed Studio endpoint after publishing.
+## 7. Frontend dApp
 
-## Frontend
+The frontend is located in:
 
-Frontend directory:
+`frontend/`
 
-```bash
-frontend/
-```
+The frontend supports:
 
-Install and run:
+- MetaMask wallet connection
+- Arbitrum Sepolia network detection
+- Token balances
+- Voting power
+- Delegate address
+- AMM swap
+- Add liquidity
+- Lending deposit, borrow, repay, and withdraw collateral
+- Vault deposit and withdraw
+- Governance delegate and proposal creation
+- Proposal state display
+- Readable transaction error messages
+
+Run frontend:
 
 ```bash
 cd frontend
@@ -211,77 +169,224 @@ npm install
 npm run dev
 ```
 
-Required frontend environment:
+Open:
+
+`http://localhost:5173`
+
+---
+
+## 8. Local Development
+
+Install Foundry dependencies:
 
 ```bash
-VITE_ALCHEMY_RPC_URL=https://arb-sepolia.g.alchemy.com/v2/YOUR_KEY
-VITE_WALLETCONNECT_PROJECT_ID=your_walletconnect_project_id
-VITE_SUBGRAPH_URL=https://api.studio.thegraph.com/query/00000/defi-super-app/version/latest
+forge install
 ```
 
-The frontend uses:
-
-- wagmi v2
-- viem v2
-- RainbowKit
-- TanStack Query
-- graphql-request
-
-## Slither
-
-Install:
+Build contracts:
 
 ```bash
-pipx install slither-analyzer
+forge build
 ```
 
-Run:
+Run all tests:
 
 ```bash
-slither src/ --exclude-informational
+forge test -vvv
 ```
 
-Paste output and triage notes into:
+Generate coverage:
 
 ```bash
-docs/SECURITY_AUDIT.md
+forge coverage --ir-minimum --report lcov
 ```
 
-## Testing Scope
+Run formatter check:
 
-Unit and security tests cover:
+```bash
+forge fmt --check
+```
 
-- Governance token voting and delegation
-- AMM liquidity, swap, UUPS upgrade, factory CREATE2
-- Lending deposits, withdrawals, borrows, repayments, liquidations
-- ERC-4626 vault invariants
-- Governance propose, vote, queue, execute lifecycle
+Run Slither:
+
+```bash
+slither . --filter-paths "lib|test|script" --exclude-low --exclude-informational
+```
+
+Build frontend:
+
+```bash
+cd frontend
+npm install
+npm run build
+```
+
+Build subgraph:
+
+```bash
+cd subgraph
+npm install
+npm run codegen
+npm run build
+```
+
+---
+
+## 9. Testing Summary
+
+The project includes:
+
+- 176 passing tests
+- Unit tests
+- Fuzz tests
+- Invariant tests
+- Fork tests
+- Security case study tests
+- Full governance lifecycle test
+
+Important tested flows:
+
+- AMM add liquidity
+- AMM remove liquidity
+- AMM swap
+- Lending deposit collateral
+- Borrow
+- Repay
+- Liquidation
+- ERC-4626 deposit and withdraw
+- Vault rounding invariants
+- Oracle stale price checks
+- Governance propose → vote → queue → execute
+- UUPS upgrade authorization
 - Reentrancy case study
 - Access-control case study
-- Fork integrations for Chainlink, USDC, and Uniswap V2
 
-## Team Members and Ownership Areas
+Run tests:
 
-| Area | Owner |
-| --- | --- |
-| Token layer | Team member TBD |
-| AMM and factory | Team member TBD |
-| Lending and vault | Team member TBD |
-| Governance and treasury | Team member TBD |
-| Security review | Team member TBD |
-| Subgraph and frontend | Team member TBD |
-| Deployment and documentation | Team member TBD |
-
-## Commit Messages
-
-Deployment:
-
-```text
-feat(deploy): add idempotent deployment script, post-deployment verification, and gas benchmark
+```bash
+forge test -vvv
 ```
 
-Documentation:
+---
 
-```text
-docs: add architecture document, security audit report, gas optimization report, and README
+## 10. Security
+
+Security controls used in the project:
+
+- Checks-Effects-Interactions pattern
+- ReentrancyGuard on sensitive flows
+- Ownable / role-based privileged functions
+- Timelock-controlled governance actions
+- Chainlink oracle staleness checks
+- SafeERC20 for token transfers
+- No `tx.origin` authorization
+- No deprecated `transfer` / `send` usage
+- Slither check with zero High and zero Medium findings
+
+Run Slither:
+
+```bash
+slither . --filter-paths "lib|test|script" --exclude-low --exclude-informational
 ```
+
+Expected result:
+
+`0 High / 0 Medium findings`
+
+The full security audit is included in the final project report.
+
+---
+
+## 11. Governance
+
+Governance stack:
+
+- ERC20Votes governance token
+- OpenZeppelin Governor
+- TimelockController with 2-day delay
+- Voting delay: 1 day
+- Voting period: 1 week
+- Quorum: 4%
+- Proposal threshold: 1%
+
+Governance lifecycle:
+
+`propose → vote → queue → execute`
+
+The full governance lifecycle is demonstrated in the Foundry test suite.
+
+On testnet, governance uses real delay settings, so some frontend actions require waiting for the correct proposal state.
+
+---
+
+## 12. CI/CD
+
+GitHub Actions runs on every push and pull request.
+
+CI checks include:
+
+- Build and Test
+- Coverage
+- Frontend Build
+- Lint
+- Slither
+- Subgraph Build
+
+Current final status:
+
+`All checks passing`
+
+---
+
+## 13. Documentation
+
+Project documentation:
+
+| Document | Path |
+|---|---|
+| Final Project Report | `docs/FINAL_PROJECT_REPORT.pdf` |
+| Architecture & Design | Included in final project report |
+| Security Audit | Included in final project report |
+| Gas Optimization Report | Included in final project report |
+| Final Presentation | `presentation/FINAL_PRESENTATION.pdf` |
+| Deployment Addresses | `deployments/421614.json` |
+
+---
+
+## 14. Repository Structure
+
+| Folder | Description |
+|---|---|
+| `src/` | Smart contracts |
+| `test/` | Unit, fuzz, invariant, fork, and security tests |
+| `script/` | Deployment and verification scripts |
+| `frontend/` | React frontend dApp |
+| `subgraph/` | The Graph subgraph |
+| `deployments/` | Deployed addresses and explorer links |
+| `docs/` | Final report and documentation |
+| `presentation/` | Final presentation files |
+
+---
+
+## 15. Notes
+
+This repository is prepared as a full-stack decentralized protocol submission.
+
+The README provides:
+
+- Project overview
+- Setup commands
+- Test commands
+- Slither command
+- Frontend instructions
+- Subgraph instructions
+- Verified contract links
+- Documentation paths
+- Repository structure
+
+---
+
+## 16. Team Members and group SE-2408
+- Alikhan Faizrakhman
+- Azamat Oralkhanov
+- Alikhan Kenzhebek
