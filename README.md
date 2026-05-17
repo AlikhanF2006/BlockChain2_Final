@@ -389,4 +389,5 @@ The README provides:
 ## 16. Team Members and group SE-2408
 - Alikhan Faizrakhman
 - Azamat Oralkhanov
-- Alikhan Kenzhebek
+- Alikhan Kenzhebekk
+- 
