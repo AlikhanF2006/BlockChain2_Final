@@ -1,5 +1,5 @@
 # DeFi Super-App
-
+Created by Alikhan & Azamat & Alikhan:)
 DeFi Super-App is a full-stack decentralized protocol developed for the Blockchain Technologies 2 Final Project.
 
 The project follows **Option A — DeFi Super-App** and combines an AMM, lending protocol, ERC-4626 yield vault, Chainlink-style oracle integration, DAO governance, The Graph subgraph, and React frontend.
